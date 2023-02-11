@@ -36,16 +36,14 @@ df = pd.read_csv(path)
 # 7. Year Tanoto (gausah kayanya)
 # 8. isGraduate 
 
-
 # get the data from the csv file
+# name = list(df['Nama Lengkap'])
 linkedin = list(df['LinkedIn'])
-year_tanoto = list(df['Tahun TF'])
-faculty = list(df['Fakultas'])
-major = list(df['Jurusan'])
+year_tanoto_csv = list(df['Tahun TF'])
+fakultas = list(df['Fakultas'])
+jurusan = list(df['Jurusan'])
 born_date = list(df['Tanggal Lahir'])
 
-
-exit()
 
 # login
 url_login = 'https://www.linkedin.com/'
@@ -68,13 +66,6 @@ while response.status_code != 200:
     print(response.status_code)
     driver.refresh()
 
-# to validate the data
-def validate(value):
-    if value:
-        return value
-    else:
-        return "Null"
-
 # check if the element is exist
 if driver.find_element(By.ID, 'session_key'):
     driver.find_element(By.ID, 'session_key').send_keys(username)
@@ -84,31 +75,38 @@ if driver.find_element(By.ID, 'session_key'):
 else: # if the element is not exist
     print("Already login")
 
-time.sleep(10)
+time.sleep(30)
 
 driver.get(url_feed)
 print("Success go to feed page")
 count = 0
 # remove the null, nan and the space value using if else
 for i in linkedin:
-    print("\n" +  str(count))
+    print("\n" +  str(count + 2))
     count += 1
     check = str(i)
+    err = count + 3
+    tanggal_lahir = str(born_date[count-1])
+    major_person = str(jurusan[count-1])
+    faculty_person = str(fakultas[count-1])
+    year_tanoto_person = str(year_tanoto_csv[count-1])
+    year_graduate_person = int(year_tanoto_person) + 3
+    year_graduate = str(year_graduate_person)
     # if the data linkedin is null, nan or space skip the get data from the linkedin
     if check == 'nan' or check == 'null' or check == ' ':
         print("All the data is null\n")
-
-    #     print('Name : ' + name)
-    # print('linkedin_url : ' + linkedin_url)
-    # print('Tanggal lahir : ' + tanggal_lahir)
-    # print('desc : ' + desc)
-    # print('recent work or experience : ' + company_name)
-    # print('job_detail : ' + job_detail)
-    # print('Faculty : ' + faculty)
-    # print('Major : ' +  major)
-    # print('Tahun lulus : ' + str(year_graduate))
-    # print('Angkatan tanoto : ' +  str(year_tanoto))
-    # print('isGraduate : ' + isGraduate)
+        
+        # print('Name : ' + name)
+        # print('linkedin_url : ' + linkedin_url)
+        # print('Tanggal lahir : ' + tanggal_lahir)
+        # print('desc : ' + desc)
+        # print('recent work or experience : ' + company_name)
+        # print('job_detail : ' + job_detail)
+        # print('Faculty : ' + faculty)
+        # print('Major : ' +  major)
+        # print('Tahun lulus : ' + str(year_graduate))
+        # print('Angkatan tanoto : ' +  str(year_tanoto))
+        # print('isGraduate : ' + isGraduate)
         continue
     # if the data linkedin is not null, nan or space get the data from the linkedin
     else:
@@ -120,8 +118,8 @@ for i in linkedin:
         time.sleep(3)
 
         name = driver.find_element(By.CSS_SELECTOR, 'h1.text-heading-xlarge.inline.t-24.v-align-middle.break-words').text
-        tanggal_lahir = 'null'
-        faculty = 'null'
+        # tanggal_lahir = 'null'
+        # faculty = 'null'
 
         desc = driver.find_element(By.CSS_SELECTOR, 'div.text-body-medium.break-words').text
 
@@ -167,7 +165,7 @@ for i in linkedin:
         major, sep, tail = tail.partition('\n')
 
         if tail == '': 
-            year_tanoto = "Null"
+            # year_tanoto = "Null"
             year_graduate = "Null"
             isGraduate = "Null"
         else:
@@ -191,17 +189,20 @@ for i in linkedin:
                 else:
                     isGraduate = 'Not Yet'
 
-    print('Name : ' + name)
-    print('linkedin_url : ' + linkedin_url)
-    print('Tanggal lahir : ' + tanggal_lahir)
-    print('desc : ' + desc)
-    print('recent work or experience : ' + company_name)
-    print('job_detail : ' + job_detail)
-    print('Faculty : ' + faculty)
-    print('Major : ' +  major)
-    print('Tahun lulus : ' + str(year_graduate))
-    print('Angkatan tanoto : ' +  str(year_tanoto))
-    print('isGraduate : ' + isGraduate)
+    if err == 57:
+        continue
+    else:
+        print('Name : ' + name)
+        print('linkedin_url : ' + linkedin_url)
+        print('Tanggal lahir : ' + tanggal_lahir)
+        print('desc : ' + desc)
+        print('recent work or experience : ' + company_name)
+        print('job_detail : ' + job_detail)
+        print('Faculty : ' + faculty_person)
+        print('Major : ' +  major_person)
+        print('Tahun lulus : ' + str(year_graduate_person))
+        print('Angkatan tanoto : ' +  year_tanoto_person)
+        print('isGraduate : ' + isGraduate)
 
 # remove the null, nan and the space value using list comprehension
 # linkedin = [x for x in linkedin if str(x) != 'nan']
