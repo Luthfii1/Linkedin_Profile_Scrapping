@@ -43,6 +43,8 @@ year_tanoto_csv = list(df['Tahun TF'])
 fakultas = list(df['Fakultas'])
 jurusan = list(df['Jurusan'])
 born_date = list(df['Tanggal Lahir'])
+whatsapp = list(df['WhatsApp'])
+id_line = list(df['ID Line'])
 
 
 # login
@@ -90,6 +92,8 @@ for i in linkedin:
     major_person = str(jurusan[count-1])
     faculty_person = str(fakultas[count-1])
     year_tanoto_person = str(year_tanoto_csv[count-1])
+    whatsapp_person = str(whatsapp[count-1])
+    id_line_person = str(id_line[count-1])
     year_graduate_person = int(year_tanoto_person) + 3
     year_graduate = str(year_graduate_person)
     # if the data linkedin is null, nan or space skip the get data from the linkedin
@@ -203,6 +207,8 @@ for i in linkedin:
         print('Tahun lulus : ' + str(year_graduate_person))
         print('Angkatan tanoto : ' +  year_tanoto_person)
         print('isGraduate : ' + isGraduate)
+        print('whatsapp : ' + whatsapp_person)
+        print('id_line : ' + id_line_person)
 
 # remove the null, nan and the space value using list comprehension
 # linkedin = [x for x in linkedin if str(x) != 'nan']
