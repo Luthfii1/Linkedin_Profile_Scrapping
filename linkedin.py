@@ -59,11 +59,10 @@ if driver.find_element(By.ID, 'session_key'):
 else: # if the element is not exist
     print("Already login")
 
-time.sleep(60)
+time.sleep(10)
 
 driver.get(url_feed)
 print("Success go to feed page")
-count = 0
 
 # Create a new csv file
 with open('Database Scholars New.csv', 'a', encoding='UTF8', newline='') as f:
@@ -72,20 +71,20 @@ with open('Database Scholars New.csv', 'a', encoding='UTF8', newline='') as f:
     # write the header
     # writer.writerow(header)
     # remove the null, nan and the space value using if else
-    for i in linkedin[48:]:
-        print("\n" +  str(count + 2))
-        count += 1
-        check = str(i)
-        err = count + 3
-        tanggal_lahir = str(born_date[count-1])
-        major_person = str(jurusan[count-1])
-        faculty_person = str(fakultas[count-1])
-        year_tanoto_person = str(year_tanoto_csv[count-1])
-        whatsapp_person = str(whatsapp[count-1])
-        id_line_person = str(id_line[count-1])
+    for i in name[59:]:
+        print("\n" +  str(name.index(i) + 2))
+
+        tanggal_lahir = born_date[name.index(i)]
+        major_person = jurusan[name.index(i)]
+        faculty_person = fakultas[name.index(i)]
+        year_tanoto_person = year_tanoto_csv[name.index(i)]
+        whatsapp_person = whatsapp[name.index(i)]
+        id_line_person = id_line[name.index(i)]
         year_graduate_person = int(year_tanoto_person) + 3
-        year_graduate = str(year_graduate_person)
-        name_person = name[linkedin.index(i)]
+        year_graduate = year_graduate_person
+        name_person = name[name.index(i)]
+        linkedin_url = linkedin[name.index(i)]
+        check = str(linkedin_url)
         isGraduate = 'Graduate' if year_graduate_person <= 2023 else 'Not Graduate'
         if whatsapp_person == 'nan':
             whatsapp_person = ' '
@@ -94,19 +93,18 @@ with open('Database Scholars New.csv', 'a', encoding='UTF8', newline='') as f:
         # if the data linkedin is null, nan or space skip the get data from the linkedin
         if check == 'nan' or check == 'null' or check == ' ':
             print("All the data is null\n")
-            desc = 'null'
-            company_name = 'null'
-            company_recent = 'null'
-            job_detail = 'null'
-            isGraduate = 'null'
-            linkedin_url = 'null'
+            desc = ' '
+            company_name = ' '
+            company_recent = ' '
+            job_detail = ' '
+            linkedin_url = ' '
             data = [name_person, tanggal_lahir, desc, faculty_person, major_person, year_tanoto_person, year_graduate, isGraduate, company_recent, job_detail, whatsapp_person, id_line_person, linkedin_url]
             writer.writerow(data)
             continue
         # if the data linkedin is not null, nan or space get the data from the linkedin
         else:
-            driver.get(i)
-            response = requests.get(i)
+            driver.get(linkedin_url)
+            response = requests.get(linkedin_url)
             sel = Selector(text=driver.page_source)
             soup = BeautifulSoup(driver.page_source, 'html.parser')
 
@@ -157,29 +155,24 @@ with open('Database Scholars New.csv', 'a', encoding='UTF8', newline='') as f:
             head, sep, tail = tail.partition('\n')
             major, sep, tail = tail.partition('\n')
 
-        if err == 57:
-            continue
+        print('Name : ' + name_person)
+        print('linkedin_url : ' + linkedin_url)
+        print('Tanggal lahir : ' + str(tanggal_lahir))
+        if name.index(i)+2 == 57:
+            print('hello 57')
         else:
-            rowlist = [name_person, tanggal_lahir, desc, faculty_person, major_person, year_tanoto_person, year_graduate_person, isGraduate, company_name, job_detail, whatsapp_person, id_line_person, linkedin_url]
-            writer.writerow(rowlist)
-
-            print('Name : ' + name_person)
-            print('linkedin_url : ' + linkedin_url)
-            print('Tanggal lahir : ' + tanggal_lahir)
             print('desc : ' + desc)
-            print('recent work or experience : ' + company_name)
-            print('job_detail : ' + job_detail)
-            print('Faculty : ' + faculty_person)
-            print('Major : ' +  major_person)
-            print('Tahun lulus : ' + str(year_graduate_person))
-            print('Angkatan tanoto : ' +  year_tanoto_person)
-            print('isGraduate : ' + isGraduate)
-            print('whatsapp : ' + whatsapp_person)
-            print('id_line : ' + id_line_person)
+        print('recent work or experience : ' + company_name)
+        print('job_detail : ' + job_detail)
+        print('Faculty : ' + faculty_person)
+        print('Major : ' +  major_person)
+        print('Tahun lulus : ' + str(year_graduate_person))
+        print('Angkatan tanoto : ' +  str(year_tanoto_person))
+        print('isGraduate : ' + isGraduate)
+        print('whatsapp : ' + str(whatsapp_person))
+        print('id_line : ' + str(id_line_person))
 
-# remove the null, nan and the space value using list comprehension
-# linkedin = [x for x in linkedin if str(x) != 'nan']
-# linkedin = [x for x in linkedin if str(x) != 'null']
-# linkedin = [x for x in linkedin if str(x) != ' ']
+        rowlist = [name_person, tanggal_lahir, desc, faculty_person, major_person, year_tanoto_person, year_graduate_person, isGraduate, company_name, job_detail, whatsapp_person, id_line_person, linkedin_url]
+        writer.writerow(rowlist)
 
 driver.quit()

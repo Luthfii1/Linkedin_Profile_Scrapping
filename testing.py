@@ -17,5 +17,7 @@ df = pd.read_csv(path)
 
 name = list(df['Nama Lengkap'])
 linkedin = list(df['LinkedIn'])
-for i in name:
-    print(i)
+
+for i in linkedin:
+    print("Linkedin: " + i)
+    print("Name: " + name[linkedin.index(i)])
