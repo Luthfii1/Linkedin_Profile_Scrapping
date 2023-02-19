@@ -39,10 +39,6 @@ url_feed = 'https://www.linkedin.com/feed/'
 # username and password for login
 username = 'username'
 password = 'password'
-# username = 'luthfimmunir@gmail.com'
-# password = 'Waduh654321'
-username = 'luthfimisbachulmunir@gmail.com'
-password = 'linkedin123321'
 
 # get the url
 driver.get(url_login)
